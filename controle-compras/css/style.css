@@ -1,0 +1,767 @@
+:root {
+  --bg: #0b1220;
+  --card: #111a2e;
+  --muted: #8aa0c8;
+  --text: #e8f0ff;
+  --accent: #2b6cff;
+  --border: #233255;
+  --ok: #22c55e;
+  --danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #0b1220, #0a1020 60%, #070c18);
+  color: var(--text)
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px
+}
+
+.topbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px
+}
+
+.brand {
+  display: flex;
+  flex-direction: column
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 20px
+}
+
+.brand p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px
+}
+
+.card {
+  background: rgba(17, 26, 46, .9);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px
+}
+
+.grid {
+  display: grid;
+  gap: 14px
+}
+
+.grid.cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+}
+
+.grid.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+}
+
+@media (max-width: 980px) {
+  .grid.cols-4 {
+    grid-template-columns: repeat(2, 1fr)
+  }
+}
+
+@media (max-width: 620px) {
+
+  .grid.cols-4,
+  .grid.cols-2 {
+    grid-template-columns: 1fr
+  }
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: #0f1830;
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: transparent
+}
+
+.btn.ok {
+  background: rgb(172, 163, 42);
+  border-color: rgba(172, 163, 42)
+}
+
+.btn.danger {
+  background: rgba(239, 68, 68, .12);
+  border-color: rgba(239, 68, 68, .35)
+}
+
+.btn:active {
+  transform: translateY(1px)
+}
+
+.row{
+  display:flex;
+  gap:12px;
+  align-items:flex-end;
+  flex-wrap:nowrap;
+}
+
+#mesKey{
+  padding: 12px 16px;
+  line-height: 1.4;
+  display:inline-flex;
+  align-items:center;
+  font-weight:600;
+  border:1px solid rgba(255,255,255,.15);
+  white-space: nowrap;
+}
+.meskey-wrap{
+  display:flex;
+  flex-direction:column;
+}
+
+label {
+  font-size: 12px;
+  color: var(--muted)
+}
+
+select,
+input {
+  background: #0f1830;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 10px 10px;
+  outline: none
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden
+}
+
+th,
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(35, 50, 85, .7);
+  font-size: 13px
+}
+
+th {
+  background: #0f1830;
+  color: #cfe0ff;
+  text-align: left
+}
+
+td.num {
+  text-align: right
+}
+
+td input {
+  width: 110px
+}
+
+tfoot td {
+  font-weight: 700;
+  background: #0f1830
+}
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  color: #cfe0ff;
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 999px
+}
+
+.small {
+  font-size: 12px;
+  color: var(--muted)
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh
+}
+
+.form {
+  max-width: 420px;
+  width: 100%
+}
+
+.form h2 {
+  margin: 0 0 6px 0
+}
+
+.alert {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, .35);
+  background: rgba(239, 68, 68, .08);
+  color: #ffd5d5;
+  display: none
+}
+/* Login - inputs do mesmo tamanho do botão */
+.form input,
+.form button.btn {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form input {
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
+}
+
+.form button.btn {
+  height: 48px;
+  border-radius: 12px;
+}
+#btnDash,
+#btnExp{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+/* Topbar das categorias */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+/* Barra de mês/fornecedores/salvar */
+.bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+}
+
+.badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* Tabela responsiva */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Mobile */
+@media (max-width: 620px){
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .actions{
+    justify-content:flex-start;
+  }
+
+  .actions .btn{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  .bar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .bar .btn.primary{
+    width:100%;
+  }
+}
+/* garante que Voltar e Sair fiquem na 1ª linha no mobile */
+@media (max-width: 620px){
+  .actions a.btn:first-child,
+  .actions #logout{
+    order: 1;
+  }
+  .actions #goDash,
+  .actions #goExp{
+    order: 2;
+  }
+}
+/* ========= CATEGORIAS (topo + botões) ========= */
+
+/* Topbar das categorias */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* Botões do topo */
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+/* Barra de mês/fornecedores/salvar */
+.bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+}
+
+.badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* ========= TABELA RESPONSIVA ========= */
+.table-wrap{
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  width:100%;
+}
+
+/* força scroll horizontal no mobile quando a tabela for grande */
+#tbl{
+  width:100%;
+  min-width:900px; /* se ainda cortar, aumente para 1100px */
+  border-collapse:collapse;
+}
+
+/* textos longos não somem mais */
+#tbl th,
+#tbl td{
+  white-space:normal;
+  word-break:break-word;
+}
+
+/* ========= MOBILE ========= */
+@media (max-width: 620px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .actions{
+    justify-content:flex-start;
+  }
+
+  /* Botões iguais, centralizados e ocupando metade */
+  .actions .btn{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  /* garante a ordem no mobile:
+     1ª linha: Voltar + Sair
+     2ª linha: Dashboard + Exportar */
+  .actions a.btn:first-child{ order:1; }
+  .actions #logout{ order:1; }
+  .actions #goDash{ order:2; }
+  .actions #goExp{ order:2; }
+
+  .bar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .bar .btn.primary{
+    width:100%;
+  }
+}
+/* ========= CATEGORIAS (topo + botões) ========= */
+
+/* Topbar das categorias */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* Botões do topo */
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+/* Barra de mês/fornecedores/salvar */
+.bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+}
+
+.badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* ========= TABELA RESPONSIVA ========= */
+.table-wrap{
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  width:100%;
+}
+
+/* força scroll horizontal no mobile quando a tabela for grande */
+#tbl{
+  width:100%;
+  min-width:900px; /* se ainda cortar, aumente para 1100px */
+  border-collapse:collapse;
+}
+
+/* textos longos não somem mais */
+#tbl th,
+#tbl td{
+  white-space:normal;
+  word-break:break-word;
+}
+
+/* ========= MOBILE ========= */
+@media (max-width: 620px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .actions{
+    justify-content:flex-start;
+  }
+
+  /* Botões iguais, centralizados e ocupando metade */
+  .actions .btn{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  /* garante a ordem no mobile:
+     1ª linha: Voltar + Sair
+     2ª linha: Dashboard + Exportar */
+  .actions a.btn:first-child{ order:1; }
+  .actions #logout{ order:1; }
+  .actions #goDash{ order:2; }
+  .actions #goExp{ order:2; }
+
+  .bar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .bar .btn.primary{
+    width:100%;
+  }
+}
+/* ========= CATEGORIAS (topo + botões) ========= */
+
+/* Topbar das categorias */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* Botões do topo */
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+/* Barra de mês/fornecedores/salvar */
+.bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+}
+
+.badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* ========= TABELA RESPONSIVA ========= */
+.table-wrap{
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  width:100%;
+}
+
+/* força scroll horizontal no mobile quando a tabela for grande */
+#tbl{
+  width:100%;
+  min-width:900px; /* se ainda cortar, aumente para 1100px */
+  border-collapse:collapse;
+}
+
+/* textos longos não somem mais */
+#tbl th,
+#tbl td{
+  white-space:normal;
+  word-break:break-word;
+}
+
+/* ========= MOBILE ========= */
+@media (max-width: 620px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .actions{
+    justify-content:flex-start;
+  }
+
+  /* Botões iguais, centralizados e ocupando metade */
+  .actions .btn{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  /* garante a ordem no mobile:
+     1ª linha: Voltar + Sair
+     2ª linha: Dashboard + Exportar */
+  .actions a.btn:first-child{ order:1; }
+  .actions #logout{ order:1; }
+  .actions #goDash{ order:2; }
+  .actions #goExp{ order:2; }
+
+  .bar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .bar .btn.primary{
+    width:100%;
+  }
+}
+/* ========= CATEGORIAS (topo + botões) ========= */
+
+/* Topbar das categorias */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* Botões do topo */
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+/* Barra de mês/fornecedores/salvar */
+.bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+}
+
+.badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* ========= TABELA RESPONSIVA ========= */
+.table-wrap{
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  width:100%;
+}
+
+/* força scroll horizontal no mobile quando a tabela for grande */
+#tbl{
+  width:100%;
+  min-width:900px; /* se ainda cortar, aumente para 1100px */
+  border-collapse:collapse;
+}
+
+/* textos longos não somem mais */
+#tbl th,
+#tbl td{
+  white-space:normal;
+  word-break:break-word;
+}
+
+/* ========= MOBILE ========= */
+@media (max-width: 620px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .actions{
+    justify-content:flex-start;
+  }
+
+  /* Botões iguais, centralizados e ocupando metade */
+  .actions .btn{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  /* garante a ordem no mobile:
+     1ª linha: Voltar + Sair
+     2ª linha: Dashboard + Exportar */
+  .actions a.btn:first-child{ order:1; }
+  .actions #logout{ order:1; }
+  .actions #goDash{ order:2; }
+  .actions #goExp{ order:2; }
+
+  .bar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .bar .btn.primary{
+    width:100%;
+  }
+}
+/* ========= CATEGORIAS (topo + botões) ========= */
+
+/* Topbar das categorias */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* Botões do topo */
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+/* Barra de mês/fornecedores/salvar */
+.bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+}
+
+.badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* Tabela responsiva: no mobile NÃO quebra cabeçalho, rola para o lado */
+.table-wrap{
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  width:100%;
+}
+
+#tbl{
+  width:100%;
+  min-width: 1100px; /* força scroll e evita texto vertical */
+  border-collapse: collapse;
+}
+
+/* Cabeçalho sempre em uma linha */
+#tbl th{
+  white-space: nowrap;
+  word-break: normal;
+}
+
+/* Células podem quebrar (se precisar), mas sem virar vertical */
+#tbl td{
+  white-space: nowrap;   /* deixa tudo alinhado */
+}
+
+/* Inputs não estourarem */
+#tbl td input{
+  width: 90px;
+  max-width: 90px;
+}
+
+
+
+

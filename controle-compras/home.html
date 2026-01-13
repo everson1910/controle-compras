@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Home - Controle de Compras</title>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Controle de Compras</h1>
+        <p>Escolha a categoria para lançar as quantidades e gerar totais</p>
+      </div>
+      
+    </div>
+
+    <div class="card">
+  <div class="row">
+    <div>
+      <label>Mês</label><br/>
+      <select id="mes"></select>
+    </div>
+
+    <div>
+      <label>Ano</label><br/>
+      <select id="ano"></select>
+    </div>
+
+    <div class="meskey-wrap">
+      <label>&nbsp;</label><br/>
+      <span class="badge" id="mesKey"></span>
+    </div>
+  </div>
+
+  <p class="small">O mês selecionado será usado ao abrir qualquer categoria.</p>
+</div>
+
+
+      </div>
+      <p class="small">O mês selecionado será usado ao abrir qualquer categoria.</p>
+    </div>
+
+    <div class="grid cols-4" style="margin-top:14px">
+      <button class="card btn ok" data-cat="conexoes">Conexões</button>
+      <button class="card btn ok" data-cat="filtros">Filtros</button>
+      <button class="card btn ok" data-cat="ferramentas">Ferramentas</button>
+      <button class="card btn ok" data-cat="parafusos">Parafusos</button>
+    </div>
+    <div class="grid" style="margin-top:14px">
+     <a class="btn" id="btnDash" href="dashboard.html">Dashboard</a>
+     <a class="btn" id="btnExp" href="exportar.html">Exportar Excel</a>
+      <button class="btn danger" id="logout">Sair</button>
+    </div>
+
+  </div>
+
+<script type="module">
+  import { requireAuth, doLogout } from "./js/auth-guard.js";
+
+  await requireAuth();
+
+  document.getElementById("logout").addEventListener("click", doLogout);
+
+  const mesSel = document.getElementById("mes");
+  const anoSel = document.getElementById("ano");
+  const mesKeyEl = document.getElementById("mesKey");
+
+  const now = new Date();
+  const months = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+  months.forEach(m => mesSel.add(new Option(m, m)));
+  for(let y = now.getFullYear()-2; y <= now.getFullYear()+2; y++){
+    anoSel.add(new Option(String(y), String(y)));
+  }
+  mesSel.value = String(now.getMonth()+1).padStart(2,"0");
+  anoSel.value = String(now.getFullYear());
+
+ function updateKey(){
+  const monthKey = `${anoSel.value}-${mesSel.value}`;
+  mesKeyEl.textContent = `Mês selecionado: ${monthKey}`;
+  updateLinks();
+}
+
+  mesSel.addEventListener("change", updateKey);
+  anoSel.addEventListener("change", updateKey);
+  updateKey();
+
+  function updateLinks(){
+  const monthKey = `${anoSel.value}-${mesSel.value}`;
+  document.getElementById("btnDash").href = `dashboard.html?m=${encodeURIComponent(monthKey)}`;
+  document.getElementById("btnExp").href  = `exportar.html?m=${encodeURIComponent(monthKey)}`;
+}
+
+  document.querySelectorAll("[data-cat]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const cat = btn.getAttribute("data-cat");
+      const monthKey = `${anoSel.value}-${mesSel.value}`;
+      location.href = `categoria.html?cat=${encodeURIComponent(cat)}&m=${encodeURIComponent(monthKey)}`;
+    });
+  });
+</script>
+</body>
+</html>
