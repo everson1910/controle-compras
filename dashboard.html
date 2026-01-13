@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Dashboard</title>
+</head>
+<body>
+<div class="container">
+  <div class="topbar">
+    <div class="brand">
+      <h1>Dashboard</h1>
+      <p class="small" id="sub"></p>
+    </div>
+    <div class="row">
+      <a class="btn" href="home.html">Home</a>
+      <a class="btn" href="exportar.html">Exportar</a>
+      <button class="btn danger" id="logout">Sair</button>
+    </div>
+  </div>
+
+  <div class="grid cols-4">
+    <div class="card"><div class="small">Total do mês</div><h2 id="totalMes">R$ 0,00</h2></div>
+    <div class="card"><div class="small">Categorias lançadas</div><h2 id="cats">0</h2></div>
+    <div class="card"><div class="small">Total (Fornecedor 1)</div><h2 id="v1">R$ 0,00</h2></div>
+    <div class="card"><div class="small">Total (Fornecedor 2)</div><h2 id="v2">R$ 0,00</h2></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <label>Mês</label><br/>
+        <select id="month"></select>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="load">Carregar</button>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;overflow:auto">
+      <table id="tbl"></table>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

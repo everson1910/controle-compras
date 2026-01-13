@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Categoria</title>
+</head>
+<body>
+<div class="container">
+
+  <!-- TOPO -->
+  <div class="topbar">
+    <div class="brand">
+      <h1 id="title">Categoria</h1>
+      <p id="subtitle" class="small"></p>
+    </div>
+
+    <!-- ✅ actions (no mobile fica abaixo do título) -->
+    <div class="actions">
+      <a class="btn" href="home.html">Voltar</a>
+      <button class="btn danger" id="logout">Sair</button>
+      <a class="btn" id="goDash" href="#">Dashboard</a>
+      <a class="btn" id="goExp" href="#">Exportar</a>
+      
+    </div>
+  </div>
+
+  <!-- BARRA MÊS / FORNECEDORES / SALVAR -->
+  <div class="card bar">
+    <div class="badges">
+      <span class="badge" id="monthKey"></span>
+      <span class="badge" id="vendors"></span>
+    </div>
+
+    <button class="btn primary" id="btnSalvar">Salvar compra do mês</button>
+  </div>
+
+  <!-- TABELA -->
+  <div class="card" style="margin-top:14px">
+    <div class="table-wrap">
+      <table id="tbl"></table>
+    </div>
+    <p class="small" style="margin-top:10px">
+      Dica: você digita só as quantidades. Os totais são calculados automaticamente.
+    </p>
+  </div>
+
+</div>
+
+<script type="module" src="js/categoria.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Importar Excel - Compras Mensais</title>
+
+  <!-- SheetJS -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f5f6f8; }
+    header { padding: 18px 20px; background: #fff; border-bottom: 1px solid #e6e6e6; }
+    .container { padding: 18px 20px; max-width: 1200px; margin: 0 auto; }
+    .card { background:#fff; border:1px solid #e6e6e6; border-radius:14px; padding:14px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    select, input { padding:10px 12px; border-radius:10px; border:1px solid #d9d9d9; background:#fff; }
+    button { padding:10px 12px; border-radius:10px; border:0; background:#111827; color:#fff; font-weight:700; cursor:pointer; }
+    button.secondary { background:#374151; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    table { width:100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border-bottom:1px solid #eee; padding:10px; text-align:left; font-size:14px; }
+    th { color:#666; font-size:13px; }
+    .muted { color:#666; font-size:13px; }
+    .ok { color:#047857; font-weight:700; }
+    .bad { color:#b91c1c; font-weight:700; }
+    .pill { display:inline-block; padding:4px 10px; border-radius:999px; background:#f3f4f6; font-size:12px; }
+    .right { text-align:right; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container row">
+      <strong>Importar Excel</strong>
+
+      <label>Mês:</label>
+      <select id="mesSelect"></select>
+
+      <label>Ano:</label>
+      <select id="anoSelect"></select>
+
+      <span id="status" class="muted"></span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <div class="row">
+        <input type="file" id="fileInput" accept=".xlsx,.xls" />
+        <button id="btnPreview" class="secondary">Gerar preview</button>
+        <button id="btnSalvar" disabled>Salvar no mês selecionado</button>
+        <button id="btnModelo" class="secondary">Baixar modelo .xlsx</button>
+      </div>
+
+      <p class="muted" style="margin-top:10px;">
+        Formato esperado das colunas (linha 1): <span class="pill">item</span> <span class="pill">categoria</span> <span class="pill">quantidade</span> <span class="pill">valor_unitario</span><br/>
+        Obs.: também aceitamos cabeçalhos: <span class="pill">valorUnitario</span> e <span class="pill">valor unitario</span>.
+      </p>
+
+      <div id="resumoPreview" class="muted"></div>
+
+      <div style="overflow:auto;">
+        <table id="tabelaPreview" style="display:none;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Item</th>
+              <th>Categoria</th>
+              <th class="right">Qtd</th>
+              <th class="right">Valor unit.</th>
+              <th class="right">Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="./js/importarExcel.js"></script>
+</body>
+</html>

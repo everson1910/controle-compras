@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Login - Controle de Compras</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#0b1220">
+
+</head>
+<body>
+  <div class="container center">
+    <div class="card form">
+      <div class="brand" style="margin-bottom:12px">
+        <h1>Controle de Compras</h1>
+        <p>Login do administrador</p>
+      </div>
+
+      <div class="alert" id="err"></div>
+
+      <div style="display:grid;gap:10px">
+        <div>
+          <label>Email</label><br/>
+          <input id="email" type="email" placeholder="seuemail@empresa.com"/>
+        </div>
+        <div>
+          <label>Senha</label><br/>
+          <input id="senha" type="password" placeholder="••••••••"/>
+        </div>
+        <button class="btn primary" id="entrar">Entrar</button>
+        <p class="small">
+          Dica: se der erro de domínio, vá em Firebase → Authentication → Settings → Authorized domains e adicione
+          <b>localhost</b> e <b>127.0.0.1</b>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+<script type="module" src="js/login.js"></script>
+</body>
+</html>
