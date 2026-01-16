@@ -9,6 +9,8 @@ const qs = new URLSearchParams(location.search);
 const catKey = qs.get("cat");
 const monthKey = qs.get("m");
 
+const loadSaved = qs.get("load") === "1"; // use ?load=1 na URL se quiser carregar quantidades salvas
+
 const cfg = CATEGORIES[catKey];
 if(!cfg){
   alert("Categoria inválida.");
@@ -35,6 +37,19 @@ function num(v){
   return Number.isFinite(x) ? x : 0;
 }
 
+function toQty(v){
+  // Quantidade sempre inteira >= 0
+  const n = parseInt(String(v ?? ""), 10);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+
+// Mostra quantidade vazia quando for 0 (melhor UX: não polui a tela com zeros)
+function displayQty(q){
+  const n = toQty(q);
+  return n === 0 ? "" : String(n);
+}
+
 const state = cfg.items.map(it => ({
   code: it.code || "",
   name: it.name || "",
@@ -44,6 +59,8 @@ const state = cfg.items.map(it => ({
 }));
 
 // carrega dados já salvos (se existirem)
+
+if(loadSaved){
 try{
   const cats = await getMonthCategories(monthKey);
   const saved = cats[catKey];
@@ -51,18 +68,19 @@ try{
     const byKey = new Map(saved.items.map(i => [`${i.code}__${i.name}`, i]));
     state.forEach(r=>{
       const s = byKey.get(`${r.code}__${r.name}`);
-      if(s && Array.isArray(s.qty)) r.qty = s.qty.map(num);
+      if(s && Array.isArray(s.qty)) r.qty = s.qty.map(toQty);
     });
   }
 }catch(e){
   console.warn("Não foi possível carregar dados salvos:", e);
+}
 }
 
 function recalc(){
   let sumV = [0,0,0];
 
   state.forEach(row=>{
-    row.total = row.qty.map((q,i)=> q * row.price[i]);
+    row.total = row.qty.map((q,i)=> toQty(q) * row.price[i]);
     row.total.forEach((t,i)=> sumV[i]+=t);
   });
 
@@ -112,9 +130,9 @@ function build(){
           <td class="num">${money(row.price[1])}</td>
           <td class="num">${money(row.price[2])}</td>
 
-          <td class="num"><input type="number" min="0" step="1" data-qty="0" data-i="${i}" value="${row.qty[0]||0}"></td>
-          <td class="num"><input type="number" min="0" step="1" data-qty="1" data-i="${i}" value="${row.qty[1]||0}"></td>
-          <td class="num"><input type="number" min="0" step="1" data-qty="2" data-i="${i}" value="${row.qty[2]||0}"></td>
+          <td class="num"><input type="number" min="0" step="1" data-qty="0" data-i="${i}" value="${displayQty(row.qty[0])}"></td>
+          <td class="num"><input type="number" min="0" step="1" data-qty="1" data-i="${i}" value="${displayQty(row.qty[1])}"></td>
+          <td class="num"><input type="number" min="0" step="1" data-qty="2" data-i="${i}" value="${displayQty(row.qty[2])}"></td>
 
           <td class="num" data-total="0">${money(0)}</td>
           <td class="num" data-total="1">${money(0)}</td>
@@ -140,7 +158,7 @@ function build(){
     inp.addEventListener("input", ()=>{
       const i = Number(inp.getAttribute("data-i"));
       const j = Number(inp.getAttribute("data-qty"));
-      state[i].qty[j] = num(inp.value);
+      state[i].qty[j] = toQty(inp.value);
       recalc();
     });
   });
@@ -159,11 +177,17 @@ document.getElementById("btnSalvar").addEventListener("click", async ()=>{
     items: state.map(r=>({
       code:r.code, name:r.name,
       price:r.price, qty:r.qty,
-      total: r.qty.map((q,i)=> q*r.price[i]),
+      total: r.qty.map((q,i)=> toQty(q)*r.price[i]),
     })),
     savedAt: new Date().toISOString(),
   };
 
   await savePurchase({ monthKey, categoryKey: catKey, payload });
+
+
+  // Depois de salvar, limpa os campos (abre zerado para um novo lançamento)
+  state.forEach(r=>{ r.qty = [0,0,0]; r.total = [0,0,0]; });
+  tbl.querySelectorAll("input[data-qty]").forEach(inp=>{ inp.value = ""; });
+  recalc();
   alert("Salvo no Firestore ✅");
 });
