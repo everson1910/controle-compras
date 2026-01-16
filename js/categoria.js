@@ -191,3 +191,9 @@ document.getElementById("btnSalvar").addEventListener("click", async ()=>{
   recalc();
   alert("Salvo no Firestore ✅");
 });
+// Bloqueia pull-to-refresh no APK
+document.addEventListener('touchmove', e => {
+  if (window.scrollY === 0) {
+    e.preventDefault();
+  }
+}, { passive: false });

@@ -72,3 +72,9 @@ async function render(mKey){
 
 document.getElementById("load").addEventListener("click", ()=> render(monthSel.value));
 if(monthSel.value) render(monthSel.value);
+// Bloqueia pull-to-refresh no APK
+document.addEventListener('touchmove', e => {
+  if (window.scrollY === 0) {
+    e.preventDefault();
+  }
+}, { passive: false });

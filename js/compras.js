@@ -18,3 +18,9 @@ export async function salvarCompra(mes, item, categoria, quantidade, valorUnitar
 
   await atualizarResumoMensal(mes);
 }
+// Bloqueia pull-to-refresh no APK
+document.addEventListener('touchmove', e => {
+  if (window.scrollY === 0) {
+    e.preventDefault();
+  }
+}, { passive: false });
