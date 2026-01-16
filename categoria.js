@@ -39,7 +39,7 @@ const state = cfg.items.map(it => ({
   code: it.code || "",
   name: it.name || "",
   price: (it.price || [0,0,0]).map(num),
-  qty: [null,null,null],
+  qty: [0,0,0],
   total: [0,0,0],
 }));
 
@@ -171,14 +171,13 @@ document.getElementById("btnSalvar").addEventListener("click", async ()=>{
 
   await savePurchase({ monthKey, categoryKey: catKey, payload });
 
-  // Limpa os campos (fica em branco) para o próximo lançamento
-  // (fazemos ANTES do alert porque o alert "congela" a tela)
+  // Confirma e, depois, limpa os campos (fica em branco) para o próximo lançamento
+  alert("Salvo no Firestore ✅");
+
   state.forEach(r => (r.qty = [0, 0, 0]));
   tbl.querySelectorAll('input[data-qty]').forEach(inp => {
     inp.value = "";
     inp.defaultValue = ""; // ajuda em alguns browsers
   });
   recalc();
-
-  alert("Salvo no Firestore ✅");
 });
