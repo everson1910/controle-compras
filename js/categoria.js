@@ -39,7 +39,7 @@ const state = cfg.items.map(it => ({
   code: it.code || "",
   name: it.name || "",
   price: (it.price || [0,0,0]).map(num),
-  qty: [null,null,null],
+  qty: [0,0,0],
   total: [0,0,0],
 }));
 
@@ -92,15 +92,12 @@ function build(){
       <tr>
         <th style="min-width:140px">CÓDIGO</th>
         <th style="min-width:320px">${cfg.title.toUpperCase()}</th>
-
-        <th class="num">QTD ${v1}</th>
-        <th class="num">QTD ${v2}</th>
-        <th class="num">QTD ${v3}</th>
-
         <th class="num">PREÇO ${v1}</th>
         <th class="num">PREÇO ${v2}</th>
         <th class="num">PREÇO ${v3}</th>
-
+        <th class="num">QTD ${v1}</th>
+        <th class="num">QTD ${v2}</th>
+        <th class="num">QTD ${v3}</th>
         <th class="num">TOTAL ${v1}</th>
         <th class="num">TOTAL ${v2}</th>
         <th class="num">TOTAL ${v3}</th>
@@ -109,16 +106,15 @@ function build(){
     <tbody>
       ${state.map((row,i)=>`
         <tr data-i="${i}">
-          <td class="col-code">${row.code}</td>
-          <td class="col-name">${row.name}</td>
-
-          <td class="num"><input type="number" min="0" step="1" data-qty="0" data-i="${i}" value="${row.qty[0] > 0 ? row.qty[0] : ""}"></td>
-          <td class="num"><input type="number" min="0" step="1" data-qty="1" data-i="${i}" value="${row.qty[1] > 0 ? row.qty[1] : ""}"></td>
-          <td class="num"><input type="number" min="0" step="1" data-qty="2" data-i="${i}" value="${row.qty[2] > 0 ? row.qty[2] : ""}"></td>
-
+          <td>${row.code}</td>
+          <td>${row.name}</td>
           <td class="num">${money(row.price[0])}</td>
           <td class="num">${money(row.price[1])}</td>
           <td class="num">${money(row.price[2])}</td>
+
+          <td class="num"><input type="number" min="0" step="1" data-qty="0" data-i="${i}" value="${row.qty[0]||0}"></td>
+          <td class="num"><input type="number" min="0" step="1" data-qty="1" data-i="${i}" value="${row.qty[1]||0}"></td>
+          <td class="num"><input type="number" min="0" step="1" data-qty="2" data-i="${i}" value="${row.qty[2]||0}"></td>
 
           <td class="num" data-total="0">${money(0)}</td>
           <td class="num" data-total="1">${money(0)}</td>
@@ -144,8 +140,7 @@ function build(){
     inp.addEventListener("input", ()=>{
       const i = Number(inp.getAttribute("data-i"));
       const j = Number(inp.getAttribute("data-qty"));
-      const raw = inp.value.trim();
-      state[i].qty[j] = raw === "" ? 0 : num(raw);
+      state[i].qty[j] = num(inp.value);
       recalc();
     });
   });
@@ -170,15 +165,5 @@ document.getElementById("btnSalvar").addEventListener("click", async ()=>{
   };
 
   await savePurchase({ monthKey, categoryKey: catKey, payload });
-
-  // Limpa os campos (fica em branco) para o próximo lançamento
-  // (fazemos ANTES do alert porque o alert "congela" a tela)
-  state.forEach(r => (r.qty = [0, 0, 0]));
-  tbl.querySelectorAll('input[data-qty]').forEach(inp => {
-    inp.value = "";
-    inp.defaultValue = ""; // ajuda em alguns browsers
-  });
-  recalc();
-
   alert("Salvo no Firestore ✅");
 });

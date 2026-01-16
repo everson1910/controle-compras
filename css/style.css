@@ -762,29 +762,6 @@ tfoot td {
   max-width: 90px;
 }
 
-/* MOBILE: aproxima QTD da descrição (reduz largura da tabela) */
-@media (max-width: 620px){
-  /* No celular, não precisa forçar min-width grande */
-  #tbl{ min-width: 0; }
-
-  /* Esconde CÓDIGO (1ª coluna) para ganhar espaço */
-  #tbl th:nth-child(1),
-  #tbl td:nth-child(1){ display:none; }
-
-  /* Esconde colunas de PREÇO e TOTAL (da 6ª em diante) */
-  #tbl th:nth-child(n+6),
-  #tbl td:nth-child(n+6){ display:none; }
-
-  /* Inputs menores */
-  #tbl td input{
-    width: 70px;
-    max-width: 70px;
-  }
-
-  /* Descrição pode quebrar linha (não some no celular) */
-  #tbl td.col-name{ white-space: normal; }
-}
-
 
 
 
