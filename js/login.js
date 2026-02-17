@@ -38,9 +38,13 @@ btn.addEventListener("click", async () => {
   }
 });
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(() => console.log("Service Worker registrado"))
-      .catch(err => console.error("SW erro:", err));
-  });
+  // Em desenvolvimento (localhost/127.0.0.1), não registre SW para evitar cache antigo.
+  const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  if (!isLocal) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js")
+        .then(() => console.log("Service Worker registrado"))
+        .catch(err => console.error("SW erro:", err));
+    });
+  }
 }

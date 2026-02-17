@@ -103,6 +103,16 @@ export const CATEGORIES = {
       { code:"89.008.0147", name:"PORCA M16", price:[0.72,0,0] },
     ],
   },
+
+  componentes: {
+    title: "Componentes",
+    vendors: ["ADM", "CRV", "PARANÁ PF"],
+    items: [
+      // Adicione itens aqui seguindo o padrão:
+      // { code:"", name:"", price:[0,0,0] },
+    ],
+  },
+
 };
 
-export const CATEGORY_ORDER = ["conexoes","filtros","ferramentas","parafusos"];
+export const CATEGORY_ORDER = ["conexoes","filtros","ferramentas","parafusos", "componentes"];

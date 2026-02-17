@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Orçamentos</title>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <div class="brand">
+      <h1 id="title">Orçamentos</h1>
+      <p class="small" id="sub"></p>
+    </div>
+    <div class="actions">
+      <a class="btn" id="backCat" href="#">Voltar</a>
+      <button class="btn danger" id="logout">Sair</button>
+      <a class="btn" id="goDash" href="#">Dashboard</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div style="flex:1;min-width:220px">
+        <label>Fornecedor</label><br/>
+        <input id="supplier" placeholder="Ex: NEWTEC" />
+      </div>
+      <div style="flex:1;min-width:220px">
+        <label>Descrição</label><br/>
+        <input id="desc" placeholder="Ex: Tubos, conexões, válvulas..." />
+      </div>
+
+
+      <div style="width:210px">
+        <label>N° do orçamento/pedido</label><br/>
+        <input id="orderNo" placeholder="Ex: 2030" />
+      </div>
+
+      <div style="width:180px">
+        <label>Valor total do orçamento</label><br/>
+        <input id="total" type="number" inputmode="decimal" step="0.01" placeholder="0,00"/>
+      </div>
+    </div>
+</div>
+</div>
+
+    <div class="row" style="margin-top:12px;align-items:center;justify-content:space-between">
+      <div class="small" style="opacity:.9">Status inicial: <strong>Em aprovação</strong> (você altera depois em “Visualizar orçamentos”).</div>
+      <button class="btn primary" id="add">Salvar orçamento</button>
+    </div>
+
+    <div class="alert" id="msg" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="row" style="justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h2 style="margin:0;font-size:16px">Orçamentos do mês</h2>
+      <div class="row" style="margin:0;gap:10px;justify-content:flex-end;flex:1;flex-wrap:wrap">
+        <button class="btn" id="toggleList">Visualizar orçamentos</button>
+        <button class="btn" id="refresh" style="display:none">Atualizar</button>
+      </div>
+    </div>
+
+    <div id="listWrap" style="margin-top:10px;overflow:auto;display:none">
+      <table id="tbl"></table>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="js/orcamentos.js"></script>
+</body>
+</html>

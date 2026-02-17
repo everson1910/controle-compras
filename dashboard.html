@@ -20,11 +20,32 @@
     </div>
   </div>
 
-  <div class="grid cols-4">
+  <div class="grid cols-2">
     <div class="card"><div class="small">Total do mês</div><h2 id="totalMes">R$ 0,00</h2></div>
     <div class="card"><div class="small">Categorias lançadas</div><h2 id="cats">0</h2></div>
-    <div class="card"><div class="small">Total (Fornecedor 1)</div><h2 id="v1">R$ 0,00</h2></div>
-    <div class="card"><div class="small">Total (Fornecedor 2)</div><h2 id="v2">R$ 0,00</h2></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2 style="margin:0 0 10px 0;font-size:16px">Gastos por categoria (orçamentos)</h2>
+    <div class="row" style="align-items:center;justify-content:space-between">
+      <div style="flex:1;min-width:260px">
+        <canvas id="pieChart" height="220"></canvas>
+      </div>
+      <div style="flex:1;min-width:260px">
+        <div class="small">Clique em uma categoria para ver os orçamentos.</div>
+        <div id="catCards" class="grid cols-2" style="margin-top:10px"></div>
+      </div>
+    </div>
+
+    <div id="details" style="margin-top:14px;display:none">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h3 style="margin:0;font-size:15px" id="detailsTitle"></h3>
+        <button class="btn sm" id="closeDetails">Fechar</button>
+      </div>
+      <div style="margin-top:10px;overflow:auto">
+        <table id="budTbl"></table>
+      </div>
+    </div>
   </div>
 
   <div class="card" style="margin-top:14px">

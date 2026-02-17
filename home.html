@@ -15,46 +15,45 @@
       </div>
       
     </div>
+    <div class="home-head" style="margin-top:14px">
+      <div class="card home-card">
+        <div class="row">
+          <div>
+            <label>Mês</label><br/>
+            <select id="mes"></select>
+          </div>
 
-    <div class="card">
-  <div class="row">
-    <div>
-      <label>Mês</label><br/>
-      <select id="mes"></select>
-    </div>
+          <div>
+            <label>Ano</label><br/>
+            <select id="ano"></select>
+          </div>
 
-    <div>
-      <label>Ano</label><br/>
-      <select id="ano"></select>
-    </div>
+          <div class="meskey-wrap">
+            <label>&nbsp;</label><br/>
+            <span class="badge" id="mesKey"></span>
+          </div>
+        </div>
 
-    <div class="meskey-wrap">
-      <label>&nbsp;</label><br/>
-      <span class="badge" id="mesKey"></span>
-    </div>
-  </div>
-
-  <p class="small">O mês selecionado será usado ao abrir qualquer categoria.</p>
-</div>
-
-
+        <p class="small">O mês selecionado será usado ao abrir qualquer categoria.</p>
       </div>
-      <p class="small">O mês selecionado será usado ao abrir qualquer categoria.</p>
+
+      <div class="home-actions">
+        <a class="btn" id="btnDash" href="dashboard.html">Dashboard</a>
+        <a class="btn" id="btnExp" href="exportar.html">Exportar Excel</a>
+        <button class="btn danger" id="logout">Sair</button>
+      </div>
     </div>
 
-    <div class="grid cols-4" style="margin-top:14px">
+<div class="grid cols-5" style="margin-top:14px">
       <button class="card btn ok" data-cat="conexoes">Conexões</button>
       <button class="card btn ok" data-cat="filtros">Filtros</button>
       <button class="card btn ok" data-cat="ferramentas">Ferramentas</button>
       <button class="card btn ok" data-cat="parafusos">Parafusos</button>
-    </div>
-    <div class="grid" style="margin-top:14px">
-     <a class="btn" id="btnDash" href="dashboard.html">Dashboard</a>
-     <a class="btn" id="btnExp" href="exportar.html">Exportar Excel</a>
-      <button class="btn danger" id="logout">Sair</button>
+      <button class="card btn ok" data-cat="componentes">Componentes</button>
+      
     </div>
 
-  </div>
+</div>
 
 <script type="module">
   import { requireAuth, doLogout } from "./js/auth-guard.js";

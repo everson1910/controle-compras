@@ -9,7 +9,7 @@ const qs = new URLSearchParams(location.search);
 const catKey = qs.get("cat");
 const monthKey = qs.get("m");
 
-const loadSaved = qs.get("load") === "1"; // use ?load=1 na URL se quiser carregar quantidades salvas
+const loadSaved = qs.get("load") === "1"; // use ?load=1 na URL se quiser carregar o último lançamento salvo
 
 const cfg = CATEGORIES[catKey];
 if(!cfg){
@@ -18,12 +18,13 @@ if(!cfg){
 }
 
 document.getElementById("title").textContent = cfg.title;
-document.getElementById("subtitle").textContent = "Lançar quantidades e gerar totais por fornecedor";
+document.getElementById("subtitle").textContent = "Digite o valor unitário e a quantidade. O total é calculado automaticamente.";
 document.getElementById("monthKey").textContent = `Mês: ${monthKey}`;
-document.getElementById("vendors").textContent = `Fornecedores: ${cfg.vendors.join(" / ")}`;
+document.getElementById("vendors").textContent = cfg.vendors?.length ? `Fornecedores: ${cfg.vendors.join(" / ")}` : "";
 
 document.getElementById("goDash").href = `dashboard.html?m=${encodeURIComponent(monthKey)}`;
 document.getElementById("goExp").href  = `exportar.html?m=${encodeURIComponent(monthKey)}`;
+document.getElementById("goBud").href  = `orcamentos.html?cat=${encodeURIComponent(catKey)}&m=${encodeURIComponent(monthKey)}`;
 
 const tbl = document.getElementById("tbl");
 
@@ -32,93 +33,102 @@ function money(n){
   return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 }
 
-function num(v){
-  const x = Number(String(v||"").replace(",", "."));
+function toMoneyNumber(v){
+  // aceita "12,34" ou "12.34". Mantém simples e tolerante.
+  const s = String(v ?? "").trim();
+  if(!s) return 0;
+  const normalized = s.replace(/\s/g, "").replace(",", ".");
+  const x = Number(normalized);
   return Number.isFinite(x) ? x : 0;
 }
 
 function toQty(v){
-  // Quantidade sempre inteira >= 0
   const n = parseInt(String(v ?? ""), 10);
   return Number.isFinite(n) && n > 0 ? n : 0;
 }
 
-
-// Mostra quantidade vazia quando for 0 (melhor UX: não polui a tela com zeros)
 function displayQty(q){
   const n = toQty(q);
+  return n === 0 ? "" : String(n);
+}
+
+function displayPrice(p){
+  const n = toMoneyNumber(p);
   return n === 0 ? "" : String(n);
 }
 
 const state = cfg.items.map(it => ({
   code: it.code || "",
   name: it.name || "",
-  price: (it.price || [0,0,0]).map(num),
-  qty: [0,0,0],
-  total: [0,0,0],
+  unitPrice: 0,
+  qty: 0,
+  total: 0,
 }));
 
-// carrega dados já salvos (se existirem)
-
+// Carrega dados já salvos (se existirem)
 if(loadSaved){
-try{
-  const cats = await getMonthCategories(monthKey);
-  const saved = cats[catKey];
-  if(saved && Array.isArray(saved.items)){
-    const byKey = new Map(saved.items.map(i => [`${i.code}__${i.name}`, i]));
-    state.forEach(r=>{
-      const s = byKey.get(`${r.code}__${r.name}`);
-      if(s && Array.isArray(s.qty)) r.qty = s.qty.map(toQty);
-    });
+  try{
+    const cats = await getMonthCategories(monthKey);
+    const saved = cats[catKey];
+    if(saved && Array.isArray(saved.items)){
+      const byKey = new Map(saved.items.map(i => [`${i.code}__${i.name}`, i]));
+      state.forEach(r=>{
+        const s = byKey.get(`${r.code}__${r.name}`);
+        if(!s) return;
+
+        // Novo formato (unitPrice/qty)
+        if(typeof s.unitPrice !== "undefined" || typeof s.qty !== "undefined"){
+          r.unitPrice = toMoneyNumber(s.unitPrice);
+          r.qty = toQty(s.qty);
+          return;
+        }
+
+        // Formato antigo (qty/price arrays): puxa o primeiro não-zero
+        if(Array.isArray(s.qty) && Array.isArray(s.price)){
+          const q0 = s.qty.map(toQty);
+          const p0 = s.price.map(toMoneyNumber);
+          const idx = q0.findIndex(x=>x>0);
+          if(idx >= 0){
+            r.qty = q0[idx];
+            r.unitPrice = p0[idx] || 0;
+          }
+        }
+      });
+    }
+  }catch(e){
+    console.warn("Não foi possível carregar dados salvos:", e);
   }
-}catch(e){
-  console.warn("Não foi possível carregar dados salvos:", e);
-}
 }
 
 function recalc(){
-  let sumV = [0,0,0];
-
+  let sum = 0;
   state.forEach(row=>{
-    row.total = row.qty.map((q,i)=> toQty(q) * row.price[i]);
-    row.total.forEach((t,i)=> sumV[i]+=t);
+    row.total = toQty(row.qty) * toMoneyNumber(row.unitPrice);
+    sum += row.total;
   });
 
   state.forEach((row, idx)=>{
     const r = tbl.querySelector(`tr[data-i="${idx}"]`);
     if(!r) return;
-    r.querySelectorAll("[data-total]").forEach((td, j)=>{
-      td.textContent = money(row.total[j]);
-    });
+    const td = r.querySelector("[data-total]");
+    if(td) td.textContent = money(row.total);
   });
 
   const foot = tbl.querySelector("tfoot");
   if(foot){
-    foot.querySelectorAll("[data-sum]").forEach((td, j)=>{
-      td.textContent = money(sumV[j]);
-    });
-    const totalGeral = sumV.reduce((a,b)=>a+b,0);
-    foot.querySelector("[data-geral]").textContent = money(totalGeral);
+    foot.querySelector("[data-sum]").textContent = money(sum);
   }
 }
 
 function build(){
-  const [v1,v2,v3] = cfg.vendors;
-
   tbl.innerHTML = `
     <thead>
       <tr>
         <th style="min-width:140px">CÓDIGO</th>
         <th style="min-width:320px">${cfg.title.toUpperCase()}</th>
-        <th class="num">PREÇO ${v1}</th>
-        <th class="num">PREÇO ${v2}</th>
-        <th class="num">PREÇO ${v3}</th>
-        <th class="num">QTD ${v1}</th>
-        <th class="num">QTD ${v2}</th>
-        <th class="num">QTD ${v3}</th>
-        <th class="num">TOTAL ${v1}</th>
-        <th class="num">TOTAL ${v2}</th>
-        <th class="num">TOTAL ${v3}</th>
+        <th class="num" style="min-width:160px">VALOR UNIT.</th>
+        <th class="num" style="min-width:130px">QTD</th>
+        <th class="num" style="min-width:160px">TOTAL</th>
       </tr>
     </thead>
     <tbody>
@@ -126,39 +136,55 @@ function build(){
         <tr data-i="${i}">
           <td>${row.code}</td>
           <td>${row.name}</td>
-          <td class="num">${money(row.price[0])}</td>
-          <td class="num">${money(row.price[1])}</td>
-          <td class="num">${money(row.price[2])}</td>
 
-          <td class="num"><input type="number" min="0" step="1" data-qty="0" data-i="${i}" value="${displayQty(row.qty[0])}"></td>
-          <td class="num"><input type="number" min="0" step="1" data-qty="1" data-i="${i}" value="${displayQty(row.qty[1])}"></td>
-          <td class="num"><input type="number" min="0" step="1" data-qty="2" data-i="${i}" value="${displayQty(row.qty[2])}"></td>
+          <td class="num">
+            <input
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="0.01"
+              data-price
+              data-i="${i}"
+              placeholder="0,00"
+              value="${displayPrice(row.unitPrice)}">
+          </td>
 
-          <td class="num" data-total="0">${money(0)}</td>
-          <td class="num" data-total="1">${money(0)}</td>
-          <td class="num" data-total="2">${money(0)}</td>
+          <td class="num">
+            <input
+              type="number"
+              inputmode="numeric"
+              min="0"
+              step="1"
+              data-qty
+              data-i="${i}"
+              placeholder="0"
+              value="${displayQty(row.qty)}">
+          </td>
+
+          <td class="num" data-total>${money(0)}</td>
         </tr>
       `).join("")}
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="8">TOTAL</td>
-        <td class="num" data-sum="0">${money(0)}</td>
-        <td class="num" data-sum="1">${money(0)}</td>
-        <td class="num" data-sum="2">${money(0)}</td>
-      </tr>
-      <tr>
-        <td colspan="10">TOTAL GERAL (soma dos 3)</td>
-        <td class="num" data-geral>${money(0)}</td>
+        <td colspan="4">TOTAL GERAL</td>
+        <td class="num" data-sum>${money(0)}</td>
       </tr>
     </tfoot>
   `;
 
+  tbl.querySelectorAll("input[data-price]").forEach(inp=>{
+    inp.addEventListener("input", ()=>{
+      const i = Number(inp.getAttribute("data-i"));
+      state[i].unitPrice = toMoneyNumber(inp.value);
+      recalc();
+    });
+  });
+
   tbl.querySelectorAll("input[data-qty]").forEach(inp=>{
     inp.addEventListener("input", ()=>{
       const i = Number(inp.getAttribute("data-i"));
-      const j = Number(inp.getAttribute("data-qty"));
-      state[i].qty[j] = toQty(inp.value);
+      state[i].qty = toQty(inp.value);
       recalc();
     });
   });
@@ -170,27 +196,30 @@ build();
 
 document.getElementById("btnSalvar").addEventListener("click", async ()=>{
   const payload = {
+    schemaVersion: 2,
     monthKey,
     categoryKey: catKey,
     categoryTitle: cfg.title,
-    vendors: cfg.vendors,
+    vendors: cfg.vendors || [],
     items: state.map(r=>({
-      code:r.code, name:r.name,
-      price:r.price, qty:r.qty,
-      total: r.qty.map((q,i)=> toQty(q)*r.price[i]),
+      code: r.code,
+      name: r.name,
+      unitPrice: toMoneyNumber(r.unitPrice),
+      qty: toQty(r.qty),
+      total: toQty(r.qty) * toMoneyNumber(r.unitPrice),
     })),
     savedAt: new Date().toISOString(),
   };
 
   await savePurchase({ monthKey, categoryKey: catKey, payload });
 
-
   // Depois de salvar, limpa os campos (abre zerado para um novo lançamento)
-  state.forEach(r=>{ r.qty = [0,0,0]; r.total = [0,0,0]; });
-  tbl.querySelectorAll("input[data-qty]").forEach(inp=>{ inp.value = ""; });
+  state.forEach(r=>{ r.unitPrice = 0; r.qty = 0; r.total = 0; });
+  tbl.querySelectorAll("input[data-price], input[data-qty]").forEach(inp=>{ inp.value = ""; });
   recalc();
   alert("Salvo no Firestore ✅");
 });
+
 // Bloqueia pull-to-refresh no APK
 document.addEventListener('touchmove', e => {
   if (window.scrollY === 0) {

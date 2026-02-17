@@ -1,4 +1,4 @@
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE_NAME = `controle-compras-${VERSION}`;
 
 const ASSETS = [
@@ -9,6 +9,7 @@ const ASSETS = [
   "/exportar.html",
   "/categoria.html",
   "/css/style.css",
+  "/js/firebase.js",
   "/js/login.js",
   "/js/home.js",
   "/js/categoria.js",
