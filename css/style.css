@@ -156,10 +156,13 @@ input{
 /* ===== Tabela ===== */
 .table-wrap{
   overflow-x:auto;
-  overflow-y:hidden;
+  overflow-y:visible;
   -webkit-overflow-scrolling:touch;
   width:100%;
+  /* permite rolagem vertical da página mesmo com o mouse em cima da tabela */
+  overscroll-behavior-x:contain;
 }
+
 
 table{
   width:100%;

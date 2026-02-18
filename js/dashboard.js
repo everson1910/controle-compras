@@ -200,9 +200,18 @@ async function render(mKey){
 
 document.getElementById("load").addEventListener("click", ()=> render(monthSel.value));
 if(monthSel.value) render(monthSel.value);
-// Bloqueia pull-to-refresh no APK
-document.addEventListener('touchmove', e => {
-  if (window.scrollY === 0) {
+// Bloqueia pull-to-refresh no APK (sem travar a rolagem normal)
+let __touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  __touchStartY = (e.touches && e.touches[0]) ? e.touches[0].clientY : 0;
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+  // Só bloqueia quando estiver no topo E o gesto for "puxar para baixo"
+  const y = (e.touches && e.touches[0]) ? e.touches[0].clientY : 0;
+  const pullingDown = y > __touchStartY + 2;
+  if (window.scrollY === 0 && pullingDown) {
     e.preventDefault();
   }
 }, { passive: false });
+
