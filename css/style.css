@@ -561,3 +561,60 @@ a[href*="voltar"]:hover, .btn-back:hover {
   background: rgba(59, 130, 246, 0.18) !important;
   box-shadow: 0 8px 22px rgba(59, 130, 246, .25);
 }
+
+
+/* ===== PATCH v4: padroniza hover + cores glass em todas as páginas ===== */
+
+/* Hover padrão (algumas classes específicas estavam sobrescrevendo) */
+a.btn, button.btn, .btn {
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+a.btn:hover, button.btn:hover, .btn:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* Dashboard (amarelo glass) - home + páginas internas */
+#btnDash, #goDash, a[href$="dashboard.html"].btn, a[href*="dashboard"].btn {
+  background: rgba(250, 204, 21, 0.08) !important;
+  border: 1px solid #facc15 !important;
+  color: #fde68a !important;
+}
+#btnDash:hover, #goDash:hover, a[href$="dashboard.html"].btn:hover, a[href*="dashboard"].btn:hover {
+  background: rgba(250, 204, 21, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(250, 204, 21, .25) !important;
+}
+
+/* Exportar Excel (verde glass) - home + páginas internas */
+#btnExp, #goExp, a[href$="exportar.html"].btn, a[href*="exportar"].btn {
+  background: rgba(34, 197, 94, 0.08) !important;
+  border: 1px solid #22c55e !important;
+  color: #bbf7d0 !important;
+}
+#btnExp:hover, #goExp:hover, a[href$="exportar.html"].btn:hover, a[href*="exportar"].btn:hover {
+  background: rgba(34, 197, 94, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(34, 197, 94, .25) !important;
+}
+
+/* Orçamentos (roxo glass) - botão na categoria (goBud) + qualquer link/button relacionado */
+#goBud, #btnOrc, .btn-orcamentos, a[href*="orcamento"].btn, a[href*="orcamentos"].btn {
+  background: rgba(139, 92, 246, 0.08) !important;
+  border: 1px solid #8b5cf6 !important;
+  color: #c4b5fd !important;
+  box-shadow: none !important;
+}
+#goBud:hover, #btnOrc:hover, .btn-orcamentos:hover, a[href*="orcamento"].btn:hover, a[href*="orcamentos"].btn:hover {
+  background: rgba(139, 92, 246, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(139, 92, 246, .25) !important;
+}
+
+/* Sair (vermelho glass) - garantir hover igual */
+#logout, .btn.danger, .btn-danger {
+  background: rgba(239, 68, 68, 0.08) !important;
+  border: 1px solid #ef4444 !important;
+  color: #fca5a5 !important;
+  box-shadow: none !important;
+}
+#logout:hover, .btn.danger:hover, .btn-danger:hover {
+  background: rgba(239, 68, 68, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(239, 68, 68, .25) !important;
+}
