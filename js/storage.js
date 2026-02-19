@@ -12,36 +12,53 @@ import {
  */
 
 export async function savePurchase({ monthKey, categoryKey, payload }){
-  // meta do mês (para facilitar listagem)
-  await setDoc(doc(db, "months", monthKey), {
-    monthKey,
-    updatedAt: serverTimestamp()
-  }, { merge:true });
+  try{
+    await setDoc(doc(db, "months", monthKey), {
+      monthKey,
+      updatedAt: serverTimestamp()
+    }, { merge:true });
 
-  await setDoc(doc(db, "months", monthKey, "categories", categoryKey), {
-    ...payload,
-    monthKey,
-    categoryKey,
-    updatedAt: serverTimestamp()
-  }, { merge:true });
+    await setDoc(doc(db, "months", monthKey, "categories", categoryKey), {
+      ...payload,
+      monthKey,
+      categoryKey,
+      updatedAt: serverTimestamp(),
+      __source: "firestore"
+    }, { merge:true });
+
+    return { ok:true, source:"firestore" };
+  }catch(err){
+    console.warn("Firestore indisponível, salvando localmente:", err);
+    lsSaveCategory(monthKey, categoryKey, payload);
+    return { ok:true, source:"local", error: String(err?.message || err) };
+  }
 }
 
 export async function getMonthCategories(monthKey){
-  const snap = await getDocs(collection(db, "months", monthKey, "categories"));
-  const out = {};
-  snap.forEach(d => out[d.id] = d.data());
-  return out;
+  try{
+    const snap = await getDocs(collection(db, "months", monthKey, "categories"));
+    const out = {};
+    snap.forEach(d => out[d.id] = d.data());
+    return out;
+  }catch(err){
+    console.warn("Firestore indisponível, lendo localmente:", err);
+    return lsGetMonthCategories(monthKey);
+  }
 }
 
 export async function listMonths(){
-  // se não tiver orderBy disponível por falta de índice, cai no sem ordenação
   try{
-    const qy = query(collection(db, "months"), orderBy("monthKey"));
-    const snap = await getDocs(qy);
-    return snap.docs.map(d=>d.id);
-  }catch(e){
-    const snap = await getDocs(collection(db, "months"));
-    return snap.docs.map(d=>d.id).sort();
+    try{
+      const qy = query(collection(db, "months"), orderBy("monthKey"));
+      const snap = await getDocs(qy);
+      return snap.docs.map(d=>d.id).filter(Boolean);
+    }catch(e){
+      const snap = await getDocs(collection(db, "months"));
+      return snap.docs.map(d=>d.id).filter(Boolean).sort();
+    }
+  }catch(err){
+    console.warn("Firestore indisponível, listando meses localmente:", err);
+    return lsListMonths();
   }
 }
 
@@ -90,4 +107,3 @@ export async function updateBudgetStatus({ monthKey, budgetId, status }){
 export async function deleteBudget({ monthKey, budgetId }){
   await deleteDoc(doc(db, "months", monthKey, "budgets", budgetId));
 }
-

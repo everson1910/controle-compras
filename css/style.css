@@ -407,3 +407,6 @@ td input{ width:110px; }
     min-width:0;
   }
 }
+
+#pieChart svg{display:block;}
+#pieChart .small{color:var(--muted);} 

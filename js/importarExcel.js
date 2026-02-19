@@ -1,11 +1,6 @@
 // js/importarExcel.js
-import {
-  db,
-  collection,
-  doc,
-  writeBatch,
-  serverTimestamp
-} from "./firebase.js";
+import { db } from "./firebase.js";
+import { collection, doc, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 import { atualizarResumoMensal } from "./resumoMensal.js";
 

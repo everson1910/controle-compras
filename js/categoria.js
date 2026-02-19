@@ -5,6 +5,25 @@ import { requireAuth, doLogout } from "./auth-guard.js";
 await requireAuth();
 document.getElementById("logout").addEventListener("click", doLogout);
 
+function toast(msg){
+  const el = document.createElement("div");
+  el.textContent = msg;
+  el.style.position="fixed";
+  el.style.left="50%";
+  el.style.top="18px";
+  el.style.transform="translateX(-50%)";
+  el.style.background="#0f1830";
+  el.style.border="1px solid rgba(35,50,85,.9)";
+  el.style.color="#e8f0ff";
+  el.style.padding="10px 12px";
+  el.style.borderRadius="12px";
+  el.style.zIndex="9999";
+  el.style.boxShadow="0 10px 30px rgba(0,0,0,.35)";
+  document.body.appendChild(el);
+  setTimeout(()=> el.remove(), 2600);
+}
+
+
 const qs = new URLSearchParams(location.search);
 const catKey = qs.get("cat");
 const monthKey = qs.get("m");
@@ -211,7 +230,8 @@ document.getElementById("btnSalvar").addEventListener("click", async ()=>{
     savedAt: new Date().toISOString(),
   };
 
-  await savePurchase({ monthKey, categoryKey: catKey, payload });
+  const res = await savePurchase({ monthKey, categoryKey: catKey, payload });
+    toast(res.source === "firestore" ? "Salvo no Firestore ✅" : "Salvo localmente ✅ (offline/sem permissão)");
 
   // Depois de salvar, limpa os campos (abre zerado para um novo lançamento)
   state.forEach(r=>{ r.unitPrice = 0; r.qty = 0; r.total = 0; });

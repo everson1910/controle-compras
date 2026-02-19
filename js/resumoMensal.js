@@ -1,13 +1,6 @@
 // js/resumoMensal.js
-import {
-  db,
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  setDoc
-} from "./firebase.js";
+import { db } from "./firebase.js";
+import { collection, getDocs, query, where, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 export async function atualizarResumoMensal(mes) {
   const q = query(collection(db, "compras"), where("mes", "==", mes));

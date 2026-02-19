@@ -1,5 +1,6 @@
 // js/compras.js
-import { db, collection, addDoc, serverTimestamp } from "./firebase.js";
+import { db } from "./firebase.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { atualizarResumoMensal } from "./resumoMensal.js";
 
 export async function salvarCompra(mes, item, categoria, quantidade, valorUnitario, observacao = "") {

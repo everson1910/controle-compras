@@ -1,4 +1,4 @@
-const VERSION = "v2";
+const VERSION = "v10";
 const CACHE_NAME = `controle-compras-${VERSION}`;
 
 const ASSETS = [
