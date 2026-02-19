@@ -1,5 +1,6 @@
 import { requireAuth, doLogout } from "./auth-guard.js";
-import { listMonths, getMonthCategories } from "./storage.js";
+import { listMonths, getMonthCategories, listBudgets } from "./storage.js";
+import { CATEGORIES } from "./data.js";
 
 const DASH_VERSION = "v9-fix-pie";
 console.log("Dashboard JS carregado:", DASH_VERSION);
@@ -70,27 +71,53 @@ function ensureMonthOptions(list){
 
 async function calcMonth(mKey){
   const data = await getMonthCategories(mKey);
-  const cats = Object.keys(data);
 
-  const rows = cats.map(catKey=>{
-    const p = data[catKey] || {};
-    let total = 0;
+  // Orçamentos aprovados/recebidos também entram no gráfico
+  const budgets = await listBudgets({ monthKey: mKey });
+  const approved = (Array.isArray(budgets) ? budgets : []).filter(b =>
+    (b && (b.status === "APROVADO" || b.status === "RECEBIDO"))
+  );
+
+  const budgetSum = {};
+  const budgetCount = {};
+  approved.forEach(b=>{
+    const k = b.categoryKey || "outros";
+    budgetSum[k] = (budgetSum[k] || 0) + Number(b.totalValue || 0);
+    budgetCount[k] = (budgetCount[k] || 0) + 1;
+  });
+
+  const keys = new Set([
+    ...Object.keys(data || {}),
+    ...Object.keys(budgetSum)
+  ]);
+
+  const rows = Array.from(keys).map(catKey=>{
+    const p = (data && data[catKey]) ? data[catKey] : {};
+    let purchasesTotal = 0;
     const items = Array.isArray(p.items) ? p.items : [];
     items.forEach(it=>{
       const t = it.total;
-      if(Array.isArray(t)) total += t.reduce((a,b)=> a + Number(b||0), 0);
-      else total += Number(t||0);
+      if(Array.isArray(t)) purchasesTotal += t.reduce((a,b)=> a + Number(b||0), 0);
+      else purchasesTotal += Number(t||0);
     });
+
+    const budgetsTotal = Number(budgetSum[catKey] || 0);
+    const total = purchasesTotal + budgetsTotal;
+
     return {
       categoryKey: catKey,
-      category: p.categoryTitle || catKey,
+      category: p.categoryTitle || (CATEGORIES[catKey]?.title) || catKey,
       total,
+      purchasesTotal,
+      budgetsTotal,
       itemsCount: items.length,
+      budgetsCount: Number(budgetCount[catKey] || 0),
     };
   });
 
-  const totalMes = rows.reduce((acc,r)=> acc + r.total, 0);
-  return { rows, totalMes, catsCount: cats.length };
+  rows.sort((a,b)=> Number(b.total||0) - Number(a.total||0));
+  const totalMes = rows.reduce((acc,r)=> acc + Number(r.total||0), 0);
+  return { rows, totalMes, catsCount: keys.size };
 }
 
 async function render(mKey){
@@ -118,7 +145,7 @@ async function render(mKey){
       <thead>
         <tr>
           <th>Categoria</th>
-          <th class="num">Total (itens)</th>
+          <th class="num">Total (compras + aprovados)</th>
         </tr>
       </thead>
       <tbody>
@@ -163,7 +190,7 @@ async function render(mKey){
       <button class="card" data-cat="${c.categoryKey}" style="text-align:left;cursor:pointer;padding:12px;color:var(--text)">
         <div class="small">${c.category}</div>
         <div style="font-size:18px;font-weight:800">${money(c.total)}</div>
-        <div class="small">${c.itemsCount} item(ns)</div>
+        <div class="small">${c.itemsCount} item(ns)${c.budgetsCount ? ` • ${c.budgetsCount} orç.` : ``}</div>
       </button>
     `).join("");
 

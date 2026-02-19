@@ -410,3 +410,154 @@ td input{ width:110px; }
 
 #pieChart svg{display:block;}
 #pieChart .small{color:var(--muted);} 
+
+
+/* BOTÃO DASHBOARD - AMARELO FIXO */
+.btn-dashboard {
+  background: #facc15 !important;
+  color: #111 !important;
+  border: 1px solid #eab308 !important;
+}
+
+.btn-dashboard:hover {
+  background: #eab308 !important;
+}
+
+/* BOTÃO EXPORTAR - VERDE FIXO */
+.btn-exportar {
+  background: #22c55e !important;
+  color: #fff !important;
+  border: 1px solid #16a34a !important;
+}
+
+.btn-exportar:hover {
+  background: #16a34a !important;
+}
+
+
+
+
+/* ===== HOME: cores fixas (mesmo padrão do botão vermelho) ===== */
+#btnDash{
+  background: rgba(250, 204, 21, .14) !important; /* amarelo */
+  color: rgba(255,255,255,.95) !important;
+  border: 1px solid rgba(250, 204, 21, .45) !important;
+}
+#btnDash:hover{
+  background: rgba(250, 204, 21, .22) !important;
+  border-color: rgba(250, 204, 21, .60) !important;
+}
+
+#btnExp{
+  background: rgba(34, 197, 94, .14) !important; /* verde */
+  color: rgba(255,255,255,.95) !important;
+  border: 1px solid rgba(34, 197, 94, .45) !important;
+}
+#btnExp:hover{
+  background: rgba(34, 197, 94, .22) !important;
+  border-color: rgba(34, 197, 94, .60) !important;
+}
+
+/* ===== Botão VOLTAR (azul mais claro) ===== */
+.btn.back{
+  background: rgba(43, 108, 255, .18) !important;
+  border-color: rgba(43, 108, 255, .55) !important;
+  color: rgba(255,255,255,.95) !important;
+}
+.btn.back:hover{
+  background: rgba(43, 108, 255, .26) !important;
+  border-color: rgba(43, 108, 255, .70) !important;
+}
+
+
+/* ===== BOTÕES DE ORÇAMENTOS - ROXO PADRÃO GLASS ===== */
+a[href*="orcamento"],
+a[href*="orcamentos"],
+#btnOrc,
+.btn-orcamentos {
+  background: rgba(139, 92, 246, 0.08) !important;
+  border: 1px solid #8b5cf6 !important;
+  color: #c4b5fd !important;
+}
+
+a[href*="orcamento"]:hover,
+a[href*="orcamentos"]:hover,
+#btnOrc:hover,
+.btn-orcamentos:hover {
+  background: rgba(139, 92, 246, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(139, 92, 246, .25);
+  transform: translateY(-1px);
+}
+
+
+/* ===== BOTÕES DE ORÇAMENTOS - ROXO SÓLIDO SEM EFEITO ===== */
+a[href*="orcamento"],
+a[href*="orcamentos"],
+#btnOrc,
+.btn-orcamentos {
+  background: #7c3aed !important; /* roxo sólido */
+  border: 1px solid #7c3aed !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+a[href*="orcamento"]:hover,
+a[href*="orcamentos"]:hover,
+#btnOrc:hover,
+.btn-orcamentos:hover {
+  background: #6d28d9 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+
+/* ===== PADRÃO GLASS HOVER PARA TODOS OS BOTÕES ===== */
+.btn, a.btn, button {
+  transition: all 0.2s ease;
+}
+
+.btn:hover, a.btn:hover, button:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== BOTÃO SAIR - GLASS VERMELHO COM HOVER ===== */
+.btn-danger, #btnLogout, a[href*="logout"], a[href*="sair"] {
+  background: rgba(239, 68, 68, 0.08) !important;
+  border: 1px solid #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+.btn-danger:hover, #btnLogout:hover, a[href*="logout"]:hover, a[href*="sair"]:hover {
+  background: rgba(239, 68, 68, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(239, 68, 68, .25);
+}
+
+/* ===== BOTÃO ORÇAMENTOS - VOLTANDO PARA GLASS ROXO ===== */
+a[href*="orcamento"],
+a[href*="orcamentos"],
+#btnOrc,
+.btn-orcamentos {
+  background: rgba(139, 92, 246, 0.08) !important;
+  border: 1px solid #8b5cf6 !important;
+  color: #c4b5fd !important;
+}
+
+a[href*="orcamento"]:hover,
+a[href*="orcamentos"]:hover,
+#btnOrc:hover,
+.btn-orcamentos:hover {
+  background: rgba(139, 92, 246, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(139, 92, 246, .25);
+}
+
+/* ===== BOTÃO VOLTAR - AZUL CLARO GLASS ===== */
+a[href*="voltar"], .btn-back {
+  background: rgba(59, 130, 246, 0.08) !important;
+  border: 1px solid #3b82f6 !important;
+  color: #93c5fd !important;
+}
+
+a[href*="voltar"]:hover, .btn-back:hover {
+  background: rgba(59, 130, 246, 0.18) !important;
+  box-shadow: 0 8px 22px rgba(59, 130, 246, .25);
+}
