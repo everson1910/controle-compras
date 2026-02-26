@@ -1,19 +1,3 @@
-
-
-// ===== UTIL MOEDA PADRÃO (CENTAVOS) =====
-function parseBRLToCents(raw) {
-  const digits = String(raw ?? "").replace(/\D/g, "");
-  if (!digits) return 0;
-  return parseInt(digits, 10);
-}
-
-function formatCentsToBRL(cents) {
-  const value = (Number(cents || 0) / 100);
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
-}
 import { requireAuth, doLogout } from "./auth-guard.js";
 import { CATEGORIES } from "./data.js";
 import { addBudget, listBudgets, updateBudgetStatus, deleteBudget } from "./storage.js";
@@ -34,8 +18,11 @@ if(!cfg){
 
 document.getElementById("title").textContent = `Orçamentos — ${cfg.title}`;
 document.getElementById("sub").textContent = `Mês: ${monthKey}`;
-document.getElementById("backCat").href = `categoria.html?cat=${encodeURIComponent(catKey)}&m=${encodeURIComponent(monthKey)}`;
+document.getElementById("backCat").href = `home.html?m=${encodeURIComponent(monthKey)}`;
 document.getElementById("goDash").href = `dashboard.html?m=${encodeURIComponent(monthKey)}`;
+if(document.getElementById("goExp")){
+  document.getElementById("goExp").href = `exportar.html?m=${encodeURIComponent(monthKey)}`;
+}
 
 const elSupplier = document.getElementById("supplier");
 const elDesc = document.getElementById("desc");

@@ -17,6 +17,7 @@
     <div class="actions">
       <a class="btn back" id="backCat" href="#">Voltar</a>
       <button class="btn danger" id="logout">Sair</button>
+      <a class="btn ok" id="goExp" href="#">Exportar Excel</a>
       <a class="btn" id="goDash" href="#">Dashboard</a>
     </div>
   </div>
@@ -32,7 +33,6 @@
         <input id="desc" placeholder="Ex: Tubos, conexões, válvulas..." />
       </div>
 
-
       <div style="width:210px">
         <label>N° do orçamento/pedido</label><br/>
         <input id="orderNo" placeholder="Ex: 2030" />
@@ -43,22 +43,21 @@
         <input id="total" type="number" inputmode="decimal" step="0.01" placeholder="0,00"/>
       </div>
     </div>
-</div>
-</div>
 
-    <div class="row" style="margin-top:12px;align-items:center;justify-content:space-between">
+    <div class="row" style="margin-top:12px;align-items:center;justify-content:flex-start">
       <div class="small" style="opacity:.9">Status inicial: <strong>Em aprovação</strong> (você altera depois em “Visualizar orçamentos”).</div>
-      <button class="btn primary" id="add">Salvar orçamento</button>
     </div>
 
     <div class="alert" id="msg" style="margin-top:12px"></div>
   </div>
 
   <div class="card" style="margin-top:14px">
-    <div class="row" style="justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+    <div class="row" style="justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
       <h2 style="margin:0;font-size:16px">Orçamentos do mês</h2>
-      <div class="row" style="margin:0;gap:10px;justify-content:flex-end;flex:1;flex-wrap:wrap">
-        <button class="btn" id="toggleList">Visualizar orçamentos</button>
+
+      <div style="display:flex;flex-direction:row;gap:12px;align-items:center;justify-content:flex-end">
+        <button class="btn back" id="toggleList">Visualizar orçamentos</button>
+        <button class="btn purple" id="add">Salvar orçamento</button>
         <button class="btn" id="refresh" style="display:none">Atualizar</button>
       </div>
     </div>
